@@ -76,7 +76,7 @@ jobs:
             -p 18789:18789 \
             -e OPENCLAW_GATEWAY_TOKEN=smoketoken \
             -e ANTHROPIC_API_KEY=sk-ant-smoke000000000000000000000000000000000000000000000000 \
-            -v /tmp/last_image_update:/home/node/.openclaw/.last_image_update:ro \
+            -v /tmp/last_image_update:/home/node/.openclaw/.last_image_update \
             openclaw:smoke-test
 
           echo "Waiting for OpenClaw gateway to respond..."
