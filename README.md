@@ -51,6 +51,7 @@ This folder contains:
 | `ANTHROPIC_API_KEY`            | Anthropic API key                | -              |
 | `OPENAI_API_KEY`               | OpenAI API key                   | -              |
 | `GEMINI_API_KEY`               | Google Gemini API key            | -              |
+| `MISTRAL_API_KEY`              | Mistral AI API key               | -              |
 | `OPENCLAW_AUTH_CHOICE`         | Auth provider if no API key      | `skip`         |
 | `OPENCLAW_TLS_ENABLED`         | Enable HTTPS                     | `false`        |
 | `OPENCLAW_SKIP_ONBOARD`        | Skip auto-setup (for OAuth)      | `false`        |

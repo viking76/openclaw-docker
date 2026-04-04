@@ -47,6 +47,11 @@ if [ -z "${OPENCLAW_MODEL:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ] && [ -z "${OP
   export OPENCLAW_MODEL="google/gemini-2.0-flash"
 fi
 
+# Default to Mistral model when using Mistral API key (without explicit OPENCLAW_MODEL)
+if [ -z "${OPENCLAW_MODEL:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ] && [ -z "${OPENAI_API_KEY:-}" ] && [ -z "${GEMINI_API_KEY:-}" ] && [ -n "${MISTRAL_API_KEY:-}" ]; then
+  export OPENCLAW_MODEL="mistral/mistral-large-latest"
+fi
+
 # Run openclaw update and re-patch config afterwards.
 # || true: update may exit non-zero when it tries to restart via systemctl,
 # which doesn't exist in the container. The restart is unnecessary since
@@ -174,6 +179,8 @@ if [ ! -f "$CONFIG_FILE" ] && [ "${OPENCLAW_SKIP_ONBOARD:-false}" != "true" ]; t
     ONBOARD_ARGS+=(--auth-choice openai-api-key --openai-api-key "${OPENAI_API_KEY}")
   elif [ -n "${GEMINI_API_KEY:-}" ]; then
     ONBOARD_ARGS+=(--auth-choice gemini-api-key --gemini-api-key "${GEMINI_API_KEY}")
+  elif [ -n "${MISTRAL_API_KEY:-}" ]; then
+    ONBOARD_ARGS+=(--auth-choice mistral-api-key --mistral-api-key "${MISTRAL_API_KEY}")
   else
     ONBOARD_ARGS+=(--auth-choice "${OPENCLAW_AUTH_CHOICE:-skip}")
   fi
