@@ -61,6 +61,7 @@ This folder contains:
 | `OPENCLAW_SSH_ENABLED`         | Enable SSH server                | `false`        |
 | `OPENCLAW_SSH_PORT`            | SSH server port                  | `22`           |
 | `OPENCLAW_SSH_AUTHORIZED_KEYS` | SSH public keys (one per line)   | -              |
+| `GOG_ACCOUNT`                 | Google account for gog CLI       | -              |
 
 > **Auth modes:** Set `OPENCLAW_GATEWAY_PASSWORD` for password auth, or `OPENCLAW_GATEWAY_TOKEN` for token auth. If neither is set, a token is auto-generated and printed in the logs.
 
