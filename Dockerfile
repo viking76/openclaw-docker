@@ -32,6 +32,9 @@ RUN ARCH=$(dpkg --print-architecture) && \
     ln -sf /usr/local/go/bin/go /usr/local/bin/go && \
     ln -sf /usr/local/go/bin/gofmt /usr/local/bin/gofmt
 
+# Install gog (Google Workspace CLI)
+RUN go install github.com/steipete/gogcli@latest
+
 # Install OpenClaw globally from npm
 RUN npm install -g openclaw@latest
 
@@ -45,7 +48,7 @@ RUN chmod +x /entrypoint.sh
 ENV NODE_ENV=production
 ENV HOME=/home/node
 ENV TERM=xterm-256color
-ENV PATH=/usr/local/go/bin:/home/node/go/bin:$PATH
+ENV PATH=/usr/local/go/bin:/home/node/go/bin:/usr/local/bin:$PATH
 
 # Bake build timestamp into image (used to detect image updates at runtime)
 RUN date -u +%Y-%m-%dT%H:%M:%SZ > /IMAGE_BUILD_DATE
