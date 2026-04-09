@@ -11,6 +11,13 @@ RUN apt-get update && \
     ffmpeg imagemagick \
     sudo \
     curl \
+    libsecret-1-0 \
+    libdbus-1-3 \
+    libnotify-bin \
+    libasound2 \
+    libnss3 \
+    libxss1 \
+    libgbm1 \
     && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p /run/sshd
@@ -32,8 +39,48 @@ RUN ARCH=$(dpkg --print-architecture) && \
     ln -sf /usr/local/go/bin/go /usr/local/bin/go && \
     ln -sf /usr/local/go/bin/gofmt /usr/local/bin/gofmt
 
+# Install tools: pnpm, goimports
+RUN npm install -g pnpm
+RUN go install golang.org/x/tools/cmd/goimports@latest && \
+    cp $(go env GOPATH)/bin/goimports /usr/local/bin/goimports
+
 # Install gog (Google Workspace CLI)
-RUN go install github.com/steipete/gogcli@latest
+RUN git clone https://github.com/steipete/gogcli.git /tmp/gogcli && \
+    cd /tmp/gogcli && make && \
+    cp bin/gog /usr/local/bin/gog && \
+    rm -rf /tmp/gogcli
+
+# Install ordercli (Foodora/Deliveroo CLI)
+RUN git clone https://github.com/steipete/ordercli.git /tmp/ordercli && \
+    cd /tmp/ordercli && go build -o /usr/local/bin/ordercli ./cmd/ordercli && \
+    rm -rf /tmp/ordercli
+
+# Install wacli (WhatsApp CLI)
+RUN git clone https://github.com/steipete/wacli.git /tmp/wacli && \
+    cd /tmp/wacli && go build -tags sqlite_fts5 -o /usr/local/bin/wacli ./cmd/wacli && \
+    rm -rf /tmp/wacli
+
+# Install summarize (URL/YouTube/Podcast summarizer)
+RUN git clone https://github.com/steipete/summarize.git /tmp/summarize && \
+    cd /tmp/summarize && pnpm install && pnpm build && \
+    cp dist/* /usr/local/bin/ 2>/dev/null || true && \
+    rm -rf /tmp/summarize
+
+# Install camsnap (RTSP/ONVIF camera CLI)
+RUN git clone https://github.com/steipete/camsnap.git /tmp/camsnap && \
+    cd /tmp/camsnap && go build -o /usr/local/bin/camsnap ./cmd/camsnap && \
+    rm -rf /tmp/camsnap
+
+# Install gifgrep (GIF search CLI)
+RUN git clone https://github.com/steipete/gifgrep.git /tmp/gifgrep && \
+    cd /tmp/gifgrep && go build -o /usr/local/bin/gifgrep ./cmd/gifgrep && \
+    rm -rf /tmp/gifgrep
+
+# Install clawhub CLI (Skill registry for OpenClaw)
+RUN npm install -g clawhub
+
+# Install Playwright browsers for browser automation skills
+RUN npx playwright install chromium --with-deps 2>/dev/null || true
 
 # Install OpenClaw globally from npm
 RUN npm install -g openclaw@latest
