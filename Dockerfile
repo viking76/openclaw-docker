@@ -26,6 +26,12 @@ RUN apt-get update && \
 RUN echo "node ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/node && \
     chmod 0440 /etc/sudoers.d/node
 
+# Install Homebrew (brew)
+RUN git clone https://github.com/Homebrew/brew.git /opt/homebrew && \
+    ln -sf /opt/homebrew/bin/brew /usr/local/bin/brew && \
+    apt-get update && apt-get install -y build-essential procps file curl git && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install Go (latest stable)
 RUN ARCH=$(dpkg --print-architecture) && \
     case "$ARCH" in \
